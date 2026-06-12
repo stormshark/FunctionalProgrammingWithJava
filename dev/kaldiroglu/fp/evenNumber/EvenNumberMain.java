@@ -1,7 +1,5 @@
 package dev.kaldiroglu.fp.evenNumber;
 
-import java.util.function.IntConsumer;
-
 public class EvenNumberMain {
 	private int sum = 0;
 	private int product = 1;

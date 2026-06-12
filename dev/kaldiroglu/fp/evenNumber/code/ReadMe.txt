@@ -1,0 +1,8 @@
+On MacOs
+
+python EvenNumbers.py
+
+groovy EvenNumberCalculationsWithClosure.groovy
+
+csc EvenNumberOperationsWithLambda.cs
+mono EvenNumberOperationsWithLambda.exe

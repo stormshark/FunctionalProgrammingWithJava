@@ -1,7 +1,5 @@
 package dev.kaldiroglu.fp.evenNumber;
 
-import java.util.function.Function;
-
 public class EvenNumberOperationsWithLambda {
 	
 	private static int total;
