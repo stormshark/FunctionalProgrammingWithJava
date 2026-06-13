@@ -13,13 +13,13 @@ public class ExceptionWorkaroundInLambda {
         problem(paths);
     }
 
-    public static void problem(List<String> paths ){
+    public static void problem(List<String> paths) {
 //        List<byte[]> data = paths.stream()
 //                .map(p -> Files.readAllBytes(Path.of(p)))   // ERROR: unhandled IOException
 //                .toList();
     }
 
-    public static void solution1(List<String> paths){
+    public static void solution1(List<String> paths) {
         List<byte[]> data = paths.stream()
                 .map(p -> {
                     try {
@@ -31,7 +31,7 @@ public class ExceptionWorkaroundInLambda {
                 .toList();
     }
 
-    public static void solution2(List<String> paths){
+    public static void solution2(List<String> paths) {
         List<byte[]> data = paths.stream()
                 .map(unchecked(p -> Files.readAllBytes(Path.of(p))))   // temiz tekrar
                 .toList();
