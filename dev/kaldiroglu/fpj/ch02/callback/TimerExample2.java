@@ -11,7 +11,6 @@ import javax.swing.Timer;
 /**
  * Excerpt From: Horstmann, Cay S. “Core Java Volume I--Fundamentals (9th
  * Edition): 1 (Core Series).” iBooks.
- *
  */
 
 public class TimerExample2 {

@@ -5,10 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
-/**
- * @author Akin Kaldiroglu (akin.kaldiroglu@selsoft.com.tr)
- *
- */
 public class MyActionListener implements ActionListener{
 	private MyApplication application;
 	
