@@ -1,4 +1,4 @@
-package dev.kaldiroglu.fpj.ch01.code
+package dev.kaldiroglu.fpj.ch01.code.groovy
 
 class EvenNumberCalculations {
 

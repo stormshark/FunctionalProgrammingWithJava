@@ -1,6 +1,7 @@
 On MacOs
 
-python EvenNumbers.py
+python3 EvenNumbers1.py
+python3 EvenNumbers2.py
 
 groovy EvenNumberCalculationsWithClosure.groovy
 

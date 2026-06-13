@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace FunctionalProgramming{
-    public class EvenNumberOperations {
+    public class ClassicEvenNumberOperations {
         static void Main(string[] args){
         
            Console.WriteLine("EvenNumberOperations");
