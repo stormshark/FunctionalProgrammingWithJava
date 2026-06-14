@@ -40,7 +40,7 @@ public class ClassicEvenNumberOperations {
     }
 
     static int[] calculateSquareOfEvenNumbers(int n) {
-        int[] square = new int[5];
+        int[] square = new int[n/2];
         for (int i = 2; i <= n; i += 2)
             square[i / 2 - 1] = i * i;
         return square;
