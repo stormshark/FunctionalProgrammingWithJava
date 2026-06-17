@@ -125,3 +125,19 @@ dotnet run --project dev/kaldiroglu/fpj/ch01/code   # or compile EvenNumberOpera
 ### Tests
 This repository has no automated test suite; the `*Test` classes are runnable demos.
 Run any of them as shown above and verify the console output.
+
+
+# Yenilikleri Kendi Reponuza Çekme (Sync)
+İlerleyen zamanlarda orijinal depoda bir güncelleme olduğunda, o yenilikleri önce bilgisayarınıza çekip sonra kendi uzaktaki reponuza pushlamak için şu komutları sırasıyla çalıştırın:
+
+# 1. Orijinal depodaki tüm değişiklikleri bilgisayarınıza indirin
+git fetch upstream
+
+# 2. Ana dalınızda (main veya master) olduğunuzdan emin olun
+git checkout main
+
+# 3. Orijinal depodaki yenilikleri kendi yerel kodlarınızla birleştirin
+git merge upstream/main
+
+# 4. Güncellenmiş kodları kendi GitHub/GitLab reponuza yükleyin
+git push origin main
