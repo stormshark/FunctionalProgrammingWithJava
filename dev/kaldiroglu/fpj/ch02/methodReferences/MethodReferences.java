@@ -1,151 +1,73 @@
-
 package dev.kaldiroglu.fpj.ch02.methodReferences;
 
-import dev.kaldiroglu.fpj.ch03.domain.Book;
+import dev.kaldiroglu.fpj.ch02.domain.Message;
 
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
-
+/**
+ * Metot referanslarının dört türü, yalnızca bu bölüme ait kendi fonksiyonel
+ * arayüzlerimizle gösterilir — java.util.function (Consumer, Supplier, Function,
+ * BinaryOperator, ...) KULLANILMADAN. Böylece Bölüm 2, Bölüm 3'te ele alınacak
+ * hazır fonksiyonlara bağımlı olmaz.
+ */
 public class MethodReferences {
+
 	public static void main(String[] args) {
-		examples1();
-//		limitations();
+		examples();
 	}
 
-	public static void examples1() {
-		// Calling a static method
-		Consumer<String> print1 = (s1) -> System.out.println(s1);
-		print1.accept("Hey, what's up?");
+	public static void examples(){
+		// ---- 1) Statik metot  (Tip::metot) ----
+		NowSource now = System::currentTimeMillis;          // 0 argüman, long döner
+		System.out.println(now.now());
 
-		Consumer<String> print2 = System.out::println;
-		print2.accept("Hey, what's up?");
-		
-		Supplier<Long> now = System::currentTimeMillis;
-		System.out.println(new Date(now.get()));
-		
-		Function<Double, Double> twoSquared = Math::sqrt;
-		System.out.println(twoSquared.apply(2.0));
+		DoubleOp squareRoot = Math::sqrt;                   // 1 argüman
+		System.out.println(squareRoot.apply(2.0));
 
-		// Calling an instance method
-		Book book1 = new Book("The Cat in the Hat", "Dr", "Seuss", 45);
+		// ---- 2) Belirli bir nesnenin metodu  (nesne::metot) ----
+		StringConsumer print = System.out::println;         // System.out nesnesine bağlı
+		print.accept("Hey, what's up?");
 
-		Consumer<Book> bookconsumer1 = (book) -> book.printInfo();
-		bookconsumer1.accept(book1);
+		Message m = new Message("hi");
+		StringConsumer setter = m::setText;                 // m nesnesine bağlı, 1 argüman alır
+		setter.accept("hello");
+		System.out.println(m);
 
-		Consumer<Book> bookconsumer2 = Book::printInfo;
-		bookconsumer2.accept(book1);
-
-//		Consumer<Book> bookconsumer3 = book -> book::printInfo;
-//		bookconsumer3.accept(book1);
-
-		// Calling an instance method by passing an argument
-		Consumer<String> bookconsumer3 = book1::setAuthorFName;
-		bookconsumer3.accept("Ahmet");
-		System.out.println(book1);
-
-		UnaryOperator<String> greeting = x -> "Hello, ".concat(x);
-		System.out.println(greeting.apply("World"));
-
-		UnaryOperator<String> makeGreeting = "Hello, "::concat;
+		TextOp makeGreeting = "Hello, "::concat;            // "Hello, " nesnesine bağlı, 1 argüman
 		System.out.println(makeGreeting.apply("Peggy"));
 
-		// Calling a constructor
-		Supplier<Date> dateSupplier1 = () -> new Date();
-		System.out.println(dateSupplier1.get());
+		// ---- 3) Belirli bir tipin nesne metodu  (Tip::metot) ----
+		// Üzerinde metot çağrılacak nesne, parametre olarak geçilir!
+		MessageAction show = Message::show;                 // m, parametre olarak geçilir
+		show.run(m);                                        // m.show() çalışır
 
-		Supplier<Date> dateSupplier2 = Date::new;
-		System.out.println(dateSupplier2.get());
+		TextOp upper = String::toUpperCase;                 // (String s) -> s.toUpperCase()
+		System.out.println(upper.apply("world"));
 
-		Supplier<Book> bookSupplier2 = Book::new;
-		System.out.println(bookSupplier2.get());
+		TextCombiner concat = String::concat;               // 2 argüman: ilki alıcı (receiver)
+		System.out.println(concat.combine("Selam ", "abi :)"));
 
-		IntFunction<String> intToString1 = num -> Integer.toString(num);
-		System.out.println("Length of string 123: " + intToString1.apply(123).length());
+		// ---- 4) Kurucu  (Sınıf::new) ----
+		MessageMaker maker = Message::new;                  // argümansız kurucu
+		System.out.println(maker.make());
 
-		// static method reference using ::
-		IntFunction<String> intToString2 = Integer::toString;
-		System.out.println("Length of string 4567:  " + intToString2.apply(4567).length());
+		MessageFromText fromText = Message::new;            // 1 argümanlı kurucu
+		System.out.println(fromText.make("constructed"));
 
-		// lambdas made using a constructor
-		Function<String, BigInteger> newBigInt = BigInteger::new;
-		System.out.println(
-				"A BigInteger object cosntructed using this string 123456789: " + newBigInt.apply("123456789"));
-		
-		BinaryOperator<String> binaryGreeting1 = (x, y) -> x.concat(y);
-		System.out.println(binaryGreeting1.apply("Selam ", "abi :)"));
-		
-		BinaryOperator<String> binaryGreeting2 = String::concat;
-		System.out.println(binaryGreeting2.apply("Selam ", "abi :)"));
-		
-		BiFunction<String, String, String> biFunctionGreeting = String::concat;
-		System.out.println(biFunctionGreeting.apply("Selam ", "abi :)"));
-	}
-	
-	public static void limitations() {
-//		Can't refer to a smart constructor call for a Supplier
-		Supplier<A> aSupplier1 = A::new;
-		System.out.println(aSupplier1.get().i);
-		
-//		Can't refer to a smart constructor call for a Supplier
-//		if A has a smart constructor only. For this example, delete the default constructor.
-		Supplier<A> aSupplier2 = A::new;
-		System.out.println(aSupplier2.get().i);
-		
-//		To supply an argument to smart constructor use Function
-		Function<Integer, A> aFunction = A::new;
-		System.out.println(aFunction.apply(3).i);
-
-		A a = new A(5);
-		Consumer<Boolean> aConsumer1 = a::f1;
-		aConsumer1.accept(true);
-		
-//		Consumer<Boolean> aConsumer2 = a::f2;
-//		aConsumer2.accept(true);
-
-		Consumer<Boolean> aStaticConsumer1 = A::ff1;
-		aStaticConsumer1.accept(true);
-
-//		Consumer<Boolean> aStaticConsumer2 = A::ff2;
-//		aStaticConsumer2.accept(true);
-		
-		BiConsumer<Boolean, String> aStaticConsumer2 = A::ff2;
-		aStaticConsumer2.accept(true, "selam");
+		// 3 parametre alan metot referansı ve çağrısı
+		MessageMaker3 maker3 = Message::new;                // 3 argümanlı kurucu -> kendi arayüzümüz
+		System.out.println(maker3.make("Hi ", "there", 3));
 	}
 }
 
-class A {
-	int i = 5;
-	
-	A() {
-		i = 2;
-	}
 
-	A(int i) {
-		this.i = i;
-	}
+// ---- Kendi fonksiyonel arayüzlerimiz ----
 
-	public void f1(boolean b) {
+@FunctionalInterface interface NowSource       { long now(); }                          // ~ Supplier<Long>
+@FunctionalInterface interface DoubleOp        { double apply(double x); }              // ~ UnaryOperator<Double>
+@FunctionalInterface interface StringConsumer  { void accept(String s); }               // ~ Consumer<String>
+@FunctionalInterface interface TextOp          { String apply(String s); }              // ~ UnaryOperator<String>
+@FunctionalInterface interface TextCombiner    { String combine(String a, String b); }  // ~ BinaryOperator<String>
+@FunctionalInterface interface MessageAction   { void run(Message m); }                 // ~ Consumer<Message>
+@FunctionalInterface interface MessageMaker    { Message make(); }                      // ~ Supplier<Message>
+@FunctionalInterface interface MessageFromText { Message make(String text); }           // ~ Function<String,Message>
+@FunctionalInterface interface MessageMaker3   { Message make(String prefix, String body, int times); } // hazır karşılığı YOK
 
-	}
-
-	public void f2(boolean b, String s) {
-
-	}
-
-	static void ff1(boolean b) {
-
-	}
-
-	static void ff2(boolean b, String s) {
-
-	}
-}

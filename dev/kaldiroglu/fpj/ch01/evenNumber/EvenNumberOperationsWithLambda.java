@@ -7,7 +7,7 @@ public class EvenNumberOperationsWithLambda {
 	private static int[] squares = new int[5];
 
 	public static void main(String[] args) {
-		
+		System.out.print("Numbers: ");
 		EvenNumberOperation printer = (i) -> System.out.print(i + " ");
 		pickEvenNumber(10, printer);
 		
